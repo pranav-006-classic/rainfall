@@ -17,14 +17,11 @@ export default function Legend({ className = '' }: LegendProps) {
             <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z" />
           </svg>
           <span className="text-xs font-bold text-slate-800 tracking-wide uppercase">
-            Rainfall Scale
-          </span>
-          <span className="text-[10px] text-slate-400 font-mono">
-            (lib/rainfallScale.ts)
+            Rainfall Classification
           </span>
         </div>
         <span className="text-xs font-medium text-slate-500">
-          mm / 24-hr (IMD Standard)
+          24-Hour Precipitation (mm)
         </span>
       </div>
 
@@ -39,8 +36,8 @@ export default function Legend({ className = '' }: LegendProps) {
               className="rounded-full shrink-0 shadow-2xs ring-1 ring-black/10"
               style={{
                 backgroundColor: bracket.color,
-                width: `${bracket.radius * 1.5}px`,
-                height: `${bracket.radius * 1.5}px`,
+                width: '14px',
+                height: '14px',
               }}
               aria-hidden="true"
             />
@@ -48,8 +45,8 @@ export default function Legend({ className = '' }: LegendProps) {
               <span className="text-xs font-bold text-slate-800 truncate">
                 {bracket.rangeText}
               </span>
-              <span className="text-[11px] text-slate-500 truncate">
-                {bracket.label} <span className="text-slate-400 font-mono">(r={bracket.radius})</span>
+              <span className="text-[11px] text-slate-500 truncate font-medium">
+                {bracket.label}
               </span>
             </div>
           </div>

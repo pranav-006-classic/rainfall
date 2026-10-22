@@ -21,6 +21,7 @@ export default function DistrictTable({
   onSelectDistrict,
   className = '',
 }: DistrictTableProps) {
+  const [searchQuery, setSearchQuery] = useState('');
   const [sortField, setSortField] = useState<SortField>('corrected');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
 
@@ -33,7 +34,15 @@ export default function DistrictTable({
     }
   };
 
-  const sortedDistricts = [...districts].sort((a, b) => {
+  const filteredDistricts = districts.filter((d) => {
+    const q = searchQuery.toLowerCase();
+    return (
+      d.name.toLowerCase().includes(q) ||
+      d.state.toLowerCase().includes(q)
+    );
+  });
+
+  const sortedDistricts = [...filteredDistricts].sort((a, b) => {
     let aVal: number | string = 0;
     let bVal: number | string = 0;
 
@@ -62,25 +71,40 @@ export default function DistrictTable({
 
   return (
     <section
-      aria-label="District Telemetry Table Integration Area"
-      className={`flex flex-col bg-white p-4 rounded-xl border border-slate-200/80 shadow-2xs ${className}`}
+      aria-label="District Rainfall Table"
+      className={`flex flex-col bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs ${className}`}
     >
-      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
-        <div className="flex items-center gap-2">
-          <svg className="w-5 h-5 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 14h18m-9-4v8m-7 4h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+        <div>
           <h3 className="text-base font-bold text-slate-900">
-            District Telemetry Matrix
+            District Rainfall Data
           </h3>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Compare forecast model outputs and recorded rain gauge observations
+          </p>
         </div>
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-50 text-blue-800 text-xs font-semibold border border-blue-200/60">
-          <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
-          <span>Person B Integration Component: <code>components/DistrictTable.tsx</code></span>
+
+        {/* Search bar */}
+        <div className="relative min-w-[240px]">
+          <svg
+            className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input
+            type="text"
+            placeholder="Search district or state..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-9 pr-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-slate-50 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+          />
         </div>
       </div>
 
-      <div className="w-full mt-3 rounded-xl bg-slate-50/80 p-2 overflow-x-auto border border-slate-200/70">
+      <div className="w-full mt-3 rounded-xl bg-slate-50/70 p-1.5 overflow-x-auto border border-slate-200/60">
         <table className="w-full min-w-[620px] text-left text-sm">
           <thead>
             <tr className="bg-slate-200/70 text-slate-700 text-xs font-semibold uppercase tracking-wider">
@@ -94,15 +118,15 @@ export default function DistrictTable({
               <th
                 onClick={() => handleSort('raw')}
                 className={`py-2.5 px-3 cursor-pointer hover:bg-slate-300/60 select-none ${
-                  selectedLayer === 'raw' ? 'bg-blue-100/60 text-blue-900 font-bold' : ''
+                  selectedLayer === 'raw' ? 'bg-blue-100 text-blue-900 font-bold' : ''
                 }`}
               >
-                Raw (mm) {sortField === 'raw' && (sortOrder === 'asc' ? '↑' : '↓')}
+                Raw Model (mm) {sortField === 'raw' && (sortOrder === 'asc' ? '↑' : '↓')}
               </th>
               <th
                 onClick={() => handleSort('corrected')}
                 className={`py-2.5 px-3 cursor-pointer hover:bg-slate-300/60 select-none ${
-                  selectedLayer === 'corrected' ? 'bg-blue-100/60 text-blue-900 font-bold' : ''
+                  selectedLayer === 'corrected' ? 'bg-blue-100 text-blue-900 font-bold' : ''
                 }`}
               >
                 Corrected (mm) {sortField === 'corrected' && (sortOrder === 'asc' ? '↑' : '↓')}
@@ -110,7 +134,7 @@ export default function DistrictTable({
               <th
                 onClick={() => handleSort('observed')}
                 className={`py-2.5 px-3 cursor-pointer hover:bg-slate-300/60 select-none ${
-                  selectedLayer === 'observed' ? 'bg-blue-100/60 text-blue-900 font-bold' : ''
+                  selectedLayer === 'observed' ? 'bg-blue-100 text-blue-900 font-bold' : ''
                 }`}
               >
                 Observed (mm) {sortField === 'observed' && (sortOrder === 'asc' ? '↑' : '↓')}
@@ -119,16 +143,16 @@ export default function DistrictTable({
                 onClick={() => handleSort('heavyRainProb')}
                 className="py-2.5 px-3 cursor-pointer hover:bg-slate-300/60 select-none"
               >
-                Alert Prob {sortField === 'heavyRainProb' && (sortOrder === 'asc' ? '↑' : '↓')}
+                Alert Chance {sortField === 'heavyRainProb' && (sortOrder === 'asc' ? '↑' : '↓')}
               </th>
-              <th className="py-2.5 px-3 rounded-r-lg text-right">Action</th>
+              <th className="py-2.5 px-3 rounded-r-lg text-right">Details</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 font-medium">
             {sortedDistricts.length === 0 ? (
               <tr>
-                <td colSpan={7} className="py-8 text-center text-slate-500">
-                  No district data available for this date.
+                <td colSpan={7} className="py-8 text-center text-slate-500 text-xs">
+                  No districts match your search.
                 </td>
               </tr>
             ) : (
@@ -142,7 +166,7 @@ export default function DistrictTable({
                   >
                     <td className="py-2.5 px-3 font-bold text-slate-900 flex items-center gap-2">
                       <span
-                        className="w-2.5 h-2.5 rounded-full shrink-0"
+                        className="w-2.5 h-2.5 rounded-full shrink-0 shadow-2xs"
                         style={{ backgroundColor: bracket.color }}
                         aria-hidden="true"
                       />
@@ -153,18 +177,18 @@ export default function DistrictTable({
                     <td className="py-2.5 px-3 text-slate-600 text-xs">
                       {item.state}
                     </td>
-                    <td className="py-2.5 px-3 font-mono text-slate-700">
+                    <td className="py-2.5 px-3 font-mono text-slate-700 text-xs">
                       {item.rainfall.raw.toFixed(1)}
                     </td>
-                    <td className="py-2.5 px-3 font-mono font-bold text-blue-700">
+                    <td className="py-2.5 px-3 font-mono font-bold text-blue-700 text-xs">
                       {item.rainfall.corrected.toFixed(1)}
                     </td>
-                    <td className="py-2.5 px-3 font-mono text-slate-700">
+                    <td className="py-2.5 px-3 font-mono text-slate-700 text-xs">
                       {item.rainfall.observed.toFixed(1)}
                     </td>
                     <td className="py-2.5 px-3">
                       <span
-                        className="px-2 py-0.5 rounded-full text-xs font-bold font-mono"
+                        className="px-2 py-0.5 rounded-full text-xs font-bold font-mono inline-block"
                         style={{
                           backgroundColor:
                             item.rainfall.heavyRainProb >= 70
@@ -189,7 +213,7 @@ export default function DistrictTable({
                         onClick={(e) => e.stopPropagation()}
                         className="inline-flex items-center gap-1 text-xs font-semibold text-blue-700 hover:text-blue-900 hover:underline"
                       >
-                        <span>Details</span>
+                        <span>View</span>
                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>

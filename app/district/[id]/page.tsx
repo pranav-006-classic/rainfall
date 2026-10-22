@@ -46,11 +46,8 @@ export default async function DistrictDetailPage({ params }: DistrictPageProps) 
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            <span>Back to Main Dashboard</span>
+            <span>Back to Dashboard</span>
           </Link>
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-200/80 text-slate-700">
-            Station ID: <code className="font-mono">{district.id}</code>
-          </span>
         </div>
 
         {/* Station Hero Card */}
@@ -88,7 +85,7 @@ export default async function DistrictDetailPage({ params }: DistrictPageProps) 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-2xs">
             <span className="text-xs font-bold text-blue-700 uppercase tracking-wide">
-              AI-Corrected Forecast
+              Corrected Forecast
             </span>
             <div className="mt-2 flex items-baseline gap-2">
               <span className="text-3xl font-black text-slate-900 font-mono">
@@ -97,13 +94,13 @@ export default async function DistrictDetailPage({ params }: DistrictPageProps) 
               <span className="text-xs text-slate-500 font-semibold">mm/day</span>
             </div>
             <p className="mt-1 text-xs text-slate-400">
-              Model bias calibrated using spatial CNN post-processor
+              AI calibrated precipitation estimate
             </p>
           </div>
 
           <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-2xs">
             <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">
-              Raw Numerical Model
+              Raw Forecast
             </span>
             <div className="mt-2 flex items-baseline gap-2">
               <span className="text-3xl font-black text-slate-700 font-mono">
@@ -112,13 +109,13 @@ export default async function DistrictDetailPage({ params }: DistrictPageProps) 
               <span className="text-xs text-slate-500 font-semibold">mm/day</span>
             </div>
             <p className="mt-1 text-xs text-slate-400">
-              Direct GFS/NCMRWF uncalibrated model output
+              Raw numerical weather prediction model output
             </p>
           </div>
 
           <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-2xs">
             <span className="text-xs font-bold text-emerald-700 uppercase tracking-wide">
-              Observed Rain Gauge
+              Recorded Observation
             </span>
             <div className="mt-2 flex items-baseline gap-2">
               <span className="text-3xl font-black text-slate-900 font-mono">
@@ -127,12 +124,12 @@ export default async function DistrictDetailPage({ params }: DistrictPageProps) 
               <span className="text-xs text-slate-500 font-semibold">mm/day</span>
             </div>
             <p className="mt-1 text-xs text-slate-400">
-              IMD Automated Weather Station (AWS) measurement
+              Ground-truth rain gauge telemetry
             </p>
           </div>
         </div>
 
-        {/* Probability Bars (Person B specification) */}
+        {/* Probability Bars */}
         <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-2xs flex flex-col gap-4">
           <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
             <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -168,11 +165,6 @@ export default async function DistrictDetailPage({ params }: DistrictPageProps) 
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Person B integration note banner */}
-        <div className="p-4 rounded-xl bg-blue-50/70 border border-blue-200/80 text-blue-900 text-xs">
-          <strong>Person B Note:</strong> This route (<code>app/district/[id]/page.tsx</code>) serves the individual station view requested in the task guide. Person B can expand the time-series charts (<code>ForecastChart</code>) and metrics table here.
         </div>
       </div>
     </div>
